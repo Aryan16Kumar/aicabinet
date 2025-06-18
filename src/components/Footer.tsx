@@ -1,0 +1,124 @@
+
+import { Button } from "@/components/ui/button";
+import { Github } from "lucide-react";
+
+const Footer = () => {
+  return (
+    <footer className="bg-card/50 border-t border-muted/20 py-16 px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          {/* Logo and Description */}
+          <div className="md:col-span-2">
+            <div className="flex items-center mb-6">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="text-white"
+                >
+                  <rect x="3" y="4" width="18" height="2" rx="1" fill="currentColor" />
+                  <rect x="3" y="8" width="18" height="2" rx="1" fill="currentColor" />
+                  <rect x="3" y="12" width="12" height="2" rx="1" fill="currentColor" />
+                  <rect x="3" y="16" width="8" height="2" rx="1" fill="currentColor" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold ml-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                AiCabinet
+              </h3>
+            </div>
+            <p className="text-muted-foreground leading-relaxed max-w-md">
+              Your organized space for discovering, comparing, and accessing the best AI tools. 
+              Curated for professionals across all industries.
+            </p>
+            <div className="flex gap-4 mt-6">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-muted/30 hover:bg-muted/50 rounded-lg"
+              >
+                <Github className="w-4 h-4 mr-2" />
+                GitHub
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-muted/30 hover:bg-muted/50 rounded-lg"
+              >
+                Twitter
+              </Button>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-lg font-semibold mb-6">Quick Links</h4>
+            <ul className="space-y-3">
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                  All Tools
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                  Categories
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                  Featured
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                  New Releases
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="text-lg font-semibold mb-6">Company</h4>
+            <ul className="space-y-3">
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                  Contact
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                  Submit Tool
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                  Privacy Policy
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-muted/20 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-muted-foreground text-sm">
+            © 2024 AiCabinet. All rights reserved.
+          </p>
+          <p className="text-muted-foreground text-sm mt-4 md:mt-0">
+            Made with ❤️ for the AI community
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
