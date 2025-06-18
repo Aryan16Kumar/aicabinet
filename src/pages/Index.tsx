@@ -1,4 +1,5 @@
 
+import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SearchSection from "@/components/SearchSection";
 import CategoriesSection from "@/components/CategoriesSection";
@@ -8,11 +9,14 @@ import Footer from "@/components/Footer";
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <HeroSection />
-      <SearchSection />
-      <CategoriesSection />
-      <FeaturedToolsSection />
-      <Footer />
+      <Navbar />
+      <div className="pt-16"> {/* Add padding-top to account for fixed navbar */}
+        <HeroSection />
+        <SearchSection />
+        <CategoriesSection />
+        <FeaturedToolsSection />
+        <Footer />
+      </div>
     </div>
   );
 };
