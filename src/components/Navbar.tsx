@@ -1,6 +1,12 @@
 
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 const Navbar = () => {
@@ -8,10 +14,19 @@ const Navbar = () => {
 
   const navItems = [
     { name: "Home", href: "#" },
-    { name: "Categories", href: "#categories" },
     { name: "Tools", href: "#tools" },
     { name: "About", href: "#about" },
     { name: "Contact", href: "#contact" }
+  ];
+
+  const categories = [
+    "Design",
+    "Writing & Copy",
+    "Development",
+    "Marketing",
+    "Education",
+    "Productivity",
+    "Video/Audio"
   ];
 
   return (
@@ -37,6 +52,23 @@ const Navbar = () => {
                 {item.name}
               </a>
             ))}
+            
+            {/* Categories Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors duration-200 outline-none">
+                <span>Categories</span>
+                <ChevronDown className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-48 bg-popover border border-border shadow-lg">
+                {categories.map((category) => (
+                  <DropdownMenuItem key={category} className="cursor-pointer">
+                    <a href={`#category-${category.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className="w-full">
+                      {category}
+                    </a>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* CTA Button */}
@@ -72,6 +104,22 @@ const Navbar = () => {
                   {item.name}
                 </a>
               ))}
+              
+              {/* Categories in Mobile Menu */}
+              <div className="px-3 py-2">
+                <div className="text-muted-foreground font-medium mb-2">Categories</div>
+                {categories.map((category) => (
+                  <a
+                    key={category}
+                    href={`#category-${category.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+                    className="block px-3 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {category}
+                  </a>
+                ))}
+              </div>
+              
               <div className="px-3 py-2">
                 <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                   Submit Tool
