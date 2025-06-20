@@ -84,9 +84,11 @@ const Navbar = () => {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              Submit Tool
-            </Button>
+            <Link to="/submit-tool">
+              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                Submit Tool
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -143,9 +145,11 @@ const Navbar = () => {
               </div>
               
               <div className="px-3 py-2">
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                  Submit Tool
-                </Button>
+                <Link to="/submit-tool" onClick={() => setIsMenuOpen(false)}>
+                  <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                    Submit Tool
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
