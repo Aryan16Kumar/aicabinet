@@ -1,5 +1,5 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -17,7 +17,7 @@ const categories = [
   "Marketing",
   "Education",
   "Productivity",
-  "Video/Audio"
+  "Video & Audio"
 ];
 
 const aiTools = [
@@ -66,7 +66,7 @@ const aiTools = [
   {
     id: 7,
     name: "RunwayML",
-    category: "Video/Audio",
+    category: "Video & Audio",
     logo: "🎬",
     description: "AI video editing and generation platform for creators"
   },
@@ -108,9 +108,18 @@ const aiTools = [
 ];
 
 const ExploreTools = () => {
+  const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [viewMode, setViewMode] = useState("grid"); // "grid" or "list"
+
+  // Handle URL parameter for category filtering
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    if (categoryParam && categories.includes(categoryParam)) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [searchParams]);
 
   const filteredTools = aiTools.filter(tool => {
     const matchesSearch = tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

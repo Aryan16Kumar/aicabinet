@@ -1,5 +1,6 @@
 
 import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 
 const categories = [
   {
@@ -70,26 +71,30 @@ const CategoriesSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((category, index) => (
-            <Card
+            <Link
               key={category.name}
-              className="group cursor-pointer glass-effect hover:bg-muted/50 transition-all duration-300 transform hover:scale-105 hover:shadow-xl border-muted/20"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              to={`/explore-tools?category=${encodeURIComponent(category.name)}`}
             >
-              <CardContent className="p-8 text-center">
-                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {category.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-400 transition-colors">
-                  {category.name}
-                </h3>
-                <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-                  {category.description}
-                </p>
-                <span className="text-xs text-blue-400 font-medium">
-                  {category.count}
-                </span>
-              </CardContent>
-            </Card>
+              <Card
+                className="group cursor-pointer glass-effect hover:bg-muted/50 transition-all duration-300 transform hover:scale-105 hover:shadow-xl border-muted/20 h-full"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <CardContent className="p-8 text-center">
+                  <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                    {category.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-400 transition-colors">
+                    {category.name}
+                  </h3>
+                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
+                    {category.description}
+                  </p>
+                  <span className="text-xs text-blue-400 font-medium">
+                    {category.count}
+                  </span>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>
