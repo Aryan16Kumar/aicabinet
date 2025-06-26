@@ -11,37 +11,37 @@ export type Database = {
     Tables: {
       tools_submissions: {
         Row: {
-          Category: string | null
+          category: string | null
           Created_at: string | null
-          Email: string | null
+          description: string | null
           id: number
-          Pricing: string | null
-          "Short Description": string | null
-          "Tool name": string
-          "Tool Website URL": string | null
-          "Why should we include this tool? (Optional)": string | null
+          pricing: string | null
+          submitter_email: string | null
+          tool_name: string
+          tool_url: string | null
+          why_include: string | null
         }
         Insert: {
-          Category?: string | null
+          category?: string | null
           Created_at?: string | null
-          Email?: string | null
+          description?: string | null
           id?: number
-          Pricing?: string | null
-          "Short Description"?: string | null
-          "Tool name": string
-          "Tool Website URL"?: string | null
-          "Why should we include this tool? (Optional)"?: string | null
+          pricing?: string | null
+          submitter_email?: string | null
+          tool_name: string
+          tool_url?: string | null
+          why_include?: string | null
         }
         Update: {
-          Category?: string | null
+          category?: string | null
           Created_at?: string | null
-          Email?: string | null
+          description?: string | null
           id?: number
-          Pricing?: string | null
-          "Short Description"?: string | null
-          "Tool name"?: string
-          "Tool Website URL"?: string | null
-          "Why should we include this tool? (Optional)"?: string | null
+          pricing?: string | null
+          submitter_email?: string | null
+          tool_name?: string
+          tool_url?: string | null
+          why_include?: string | null
         }
         Relationships: []
       }

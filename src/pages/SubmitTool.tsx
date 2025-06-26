@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -58,7 +59,7 @@ const SubmitTool = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -82,12 +83,30 @@ const SubmitTool = () => {
 
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      // Insert data into Supabase
+      const { error } = await supabase
+        .from('tools_submissions')
+        .insert([
+          {
+            tool_name: formData.toolName,
+            tool_url: formData.websiteUrl,
+            category: formData.category,
+            description: formData.description,
+            pricing: formData.pricing,
+            why_include: formData.reasoning,
+            submitter_email: formData.email
+          }
+        ]);
+
+      if (error) {
+        throw error;
+      }
+
+      // Success!
       toast({
-        title: "Thank you for submitting!",
-        description: "We'll review your tool suggestion and get back to you soon.",
+        title: "Thanks for submitting a tool!",
+        description: "We'll review your suggestion and get back to you soon.",
       });
       
       // Reset form
@@ -100,7 +119,17 @@ const SubmitTool = () => {
         reasoning: "",
         email: ""
       });
-    }, 1500);
+
+    } catch (error) {
+      console.error('Submission error:', error);
+      toast({
+        title: "Submission Failed",
+        description: "Something went wrong. Please try again in a moment.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
