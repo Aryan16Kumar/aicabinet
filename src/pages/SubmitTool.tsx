@@ -62,8 +62,11 @@ const SubmitTool = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('Form submission started with data:', formData);
+    
     // Basic validation
     if (!formData.toolName || !formData.websiteUrl || !formData.category || !formData.description || !formData.pricing) {
+      console.log('Validation failed: Missing required fields');
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields.",
@@ -73,6 +76,7 @@ const SubmitTool = () => {
     }
 
     if (!validateUrl(formData.websiteUrl)) {
+      console.log('Validation failed: Invalid URL');
       toast({
         title: "Invalid URL",
         description: "Please enter a valid website URL.",
@@ -84,8 +88,10 @@ const SubmitTool = () => {
     setIsSubmitting(true);
     
     try {
+      console.log('Attempting to insert into Supabase...');
+      
       // Insert data into Supabase
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('tools_submissions')
         .insert([
           {
@@ -97,11 +103,15 @@ const SubmitTool = () => {
             why_include: formData.reasoning,
             submitter_email: formData.email
           }
-        ]);
+        ])
+        .select();
 
       if (error) {
+        console.error('Supabase insert error:', error);
         throw error;
       }
+
+      console.log('Successfully inserted data:', data);
 
       // Success!
       toast({
