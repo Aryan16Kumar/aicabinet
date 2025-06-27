@@ -10,7 +10,7 @@ import { LayoutGrid, LayoutList, Search, ExternalLink } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { useToolsByCategory } from "@/hooks/useTools";
+import { useToolsWithSearch } from "@/hooks/useTools";
 
 const categories = [
   "All Categories",
@@ -25,30 +25,63 @@ const categories = [
 ];
 
 const ExploreTools = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [viewMode, setViewMode] = useState("grid");
 
-  // Handle URL parameter for category filtering
+  // Handle URL parameters for category filtering and search
   useEffect(() => {
     const categoryParam = searchParams.get('category');
+    const searchParam = searchParams.get('search');
+    
     if (categoryParam && categories.includes(categoryParam)) {
       setSelectedCategory(categoryParam);
     }
+    
+    if (searchParam) {
+      setSearchTerm(searchParam);
+    }
   }, [searchParams]);
 
-  const { data: tools = [], isLoading, error } = useToolsByCategory(selectedCategory);
+  const { data: tools = [], isLoading, error } = useToolsWithSearch(selectedCategory, searchTerm);
 
-  const filteredTools = tools.filter(tool => {
-    if (!tool.tool_name && !tool.description) return false;
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    const newParams = new URLSearchParams(searchParams);
     
-    const matchesSearch = 
-      (tool.tool_name?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
-      (tool.description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
+    if (category === "All Categories") {
+      newParams.delete('category');
+    } else {
+      newParams.set('category', category);
+    }
     
-    return matchesSearch;
-  });
+    setSearchParams(newParams);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+  };
+
+  const handleSearch = () => {
+    const newParams = new URLSearchParams();
+    
+    if (searchTerm.trim()) {
+      newParams.set('search', searchTerm.trim());
+    }
+    
+    if (selectedCategory !== "All Categories") {
+      newParams.set('category', selectedCategory);
+    }
+    
+    setSearchParams(newParams);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   const handleVisitWebsite = (url: string | null) => {
     if (url) {
@@ -86,14 +119,15 @@ const ExploreTools = () => {
               <Input
                 placeholder="Search tools..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                onKeyPress={handleKeyPress}
                 className="pl-10"
               />
             </div>
 
             <div className="flex items-center gap-4">
               {/* Category Filter */}
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <Select value={selectedCategory} onValueChange={handleCategoryChange}>
                 <SelectTrigger className="w-48">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
@@ -105,6 +139,15 @@ const ExploreTools = () => {
                   ))}
                 </SelectContent>
               </Select>
+
+              {/* Search Button */}
+              <Button
+                onClick={handleSearch}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              >
+                <Search className="h-4 w-4 mr-2" />
+                Search
+              </Button>
 
               {/* View Toggle */}
               <div className="flex items-center gap-2 border rounded-lg p-1">
@@ -135,8 +178,9 @@ const ExploreTools = () => {
                 "Loading tools..."
               ) : (
                 <>
-                  Showing {filteredTools.length} tool{filteredTools.length !== 1 ? 's' : ''}
+                  Showing {tools.length} tool{tools.length !== 1 ? 's' : ''}
                   {selectedCategory !== "All Categories" && ` in ${selectedCategory}`}
+                  {searchTerm && ` matching "${searchTerm}"`}
                 </>
               )}
             </p>
@@ -174,7 +218,7 @@ const ExploreTools = () => {
             <>
               {viewMode === "grid" ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {filteredTools.map((tool) => (
+                  {tools.map((tool) => (
                     <Card
                       key={tool.id}
                       className="group cursor-pointer glass-effect hover:bg-muted/50 transition-all duration-300 transform hover:scale-105 hover:shadow-xl border-muted/20"
@@ -226,7 +270,7 @@ const ExploreTools = () => {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {filteredTools.map((tool) => (
+                  {tools.map((tool) => (
                     <Card
                       key={tool.id}
                       className="group cursor-pointer glass-effect hover:bg-muted/50 transition-all duration-200 border-muted/20"
@@ -285,12 +329,12 @@ const ExploreTools = () => {
           )}
 
           {/* No Results */}
-          {!isLoading && !error && filteredTools.length === 0 && (
+          {!isLoading && !error && tools.length === 0 && (
             <div className="text-center py-12">
               <div className="text-4xl mb-4">🔍</div>
               <h3 className="text-xl font-semibold mb-2">No tools found</h3>
               <p className="text-muted-foreground">
-                Try adjusting your search terms or category filter
+                {searchTerm ? `No tools match "${searchTerm}"` : "Try adjusting your search terms or category filter"}
               </p>
             </div>
           )}

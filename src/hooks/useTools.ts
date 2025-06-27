@@ -57,3 +57,36 @@ export const useToolsByCategory = (category: string) => {
     },
   });
 };
+
+export const useToolsWithSearch = (category: string, searchTerm: string = "") => {
+  return useQuery({
+    queryKey: ['tools', category, searchTerm],
+    queryFn: async (): Promise<Tool[]> => {
+      console.log('Fetching tools with search:', { category, searchTerm });
+      
+      let query = supabase.from('Database').select('*');
+      
+      // Apply category filter
+      if (category !== "All Categories") {
+        query = query.eq('category', category);
+      }
+      
+      // Apply search filter
+      if (searchTerm.trim()) {
+        query = query.or(`tool_name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,category.ilike.%${searchTerm}%`);
+      }
+      
+      query = query.order('tool_name');
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error('Error fetching tools with search:', error);
+        throw error;
+      }
+
+      console.log('Fetched tools with search:', { category, searchTerm, results: data });
+      return data || [];
+    },
+  });
+};
