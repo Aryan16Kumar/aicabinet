@@ -1,8 +1,33 @@
 
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleCategoriesClick = () => {
+    navigate('/explore-tools');
+    // Small delay to ensure page loads before trying to trigger category filter
+    setTimeout(() => {
+      const categorySelect = document.querySelector('[data-category-select]');
+      if (categorySelect) {
+        (categorySelect as HTMLElement).click();
+      }
+    }, 100);
+  };
+
+  const handleFeaturedClick = () => {
+    navigate('/#featured');
+    // Scroll to featured section after navigation
+    setTimeout(() => {
+      const featuredSection = document.getElementById('featured');
+      if (featuredSection) {
+        featuredSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
   return (
     <footer className="bg-card/50 border-t border-muted/20 py-16 px-6">
       <div className="max-w-7xl mx-auto">
@@ -57,19 +82,19 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-6">Quick Links</h4>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                <Link to="/explore-tools" className="text-muted-foreground hover:text-blue-400 transition-colors">
                   All Tools
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                <button onClick={handleCategoriesClick} className="text-muted-foreground hover:text-blue-400 transition-colors">
                   Categories
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                <button onClick={handleFeaturedClick} className="text-muted-foreground hover:text-blue-400 transition-colors">
                   Featured
-                </a>
+                </button>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
@@ -84,19 +109,19 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-6">Company</h4>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                <Link to="/about" className="text-muted-foreground hover:text-blue-400 transition-colors">
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                <a href="#contact" className="text-muted-foreground hover:text-blue-400 transition-colors">
                   Contact
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                <Link to="/submit-tool" className="text-muted-foreground hover:text-blue-400 transition-colors">
                   Submit Tool
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">

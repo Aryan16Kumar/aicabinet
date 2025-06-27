@@ -8,15 +8,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "Tools", href: "#tools" },
-    { name: "About", href: "#about" },
+    { name: "Tools", href: "/explore-tools" },
+    { name: "About", href: "/about" },
     { name: "Contact", href: "#contact" }
   ];
 
@@ -29,6 +30,21 @@ const Navbar = () => {
     "Productivity",
     "Video/Audio"
   ];
+
+  const handleCategoriesClick = () => {
+    navigate('/explore-tools');
+    // Small delay to ensure page loads before trying to trigger category filter
+    setTimeout(() => {
+      const categorySelect = document.querySelector('[data-category-select]');
+      if (categorySelect) {
+        (categorySelect as HTMLElement).click();
+      }
+    }, 100);
+  };
+
+  const handleCategorySelect = (category: string) => {
+    navigate(`/explore-tools?category=${encodeURIComponent(category)}`);
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -45,7 +61,7 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              item.name === "Home" ? (
+              item.name === "Home" || item.name === "Tools" || item.name === "About" ? (
                 <Link
                   key={item.name}
                   to={item.href}
@@ -66,16 +82,27 @@ const Navbar = () => {
             
             {/* Categories Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors duration-200 outline-none">
+              <DropdownMenuTrigger 
+                className="flex items-center space-x-1 text-muted-foreground hover:text-foreground transition-colors duration-200 outline-none"
+                data-category-select
+              >
                 <span>Categories</span>
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-48 bg-popover border border-border shadow-lg">
+                <DropdownMenuItem 
+                  className="cursor-pointer"
+                  onClick={handleCategoriesClick}
+                >
+                  All Categories
+                </DropdownMenuItem>
                 {categories.map((category) => (
-                  <DropdownMenuItem key={category} className="cursor-pointer">
-                    <a href={`#category-${category.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className="w-full">
-                      {category}
-                    </a>
+                  <DropdownMenuItem 
+                    key={category} 
+                    className="cursor-pointer"
+                    onClick={() => handleCategorySelect(category)}
+                  >
+                    {category}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -108,7 +135,7 @@ const Navbar = () => {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 border-t border-border">
               {navItems.map((item) => (
-                item.name === "Home" ? (
+                item.name === "Home" || item.name === "Tools" || item.name === "About" ? (
                   <Link
                     key={item.name}
                     to={item.href}
@@ -132,15 +159,26 @@ const Navbar = () => {
               {/* Categories in Mobile Menu */}
               <div className="px-3 py-2">
                 <div className="text-muted-foreground font-medium mb-2">Categories</div>
+                <button
+                  onClick={() => {
+                    handleCategoriesClick();
+                    setIsMenuOpen(false);
+                  }}
+                  className="block px-3 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                >
+                  All Categories
+                </button>
                 {categories.map((category) => (
-                  <a
+                  <button
                     key={category}
-                    href={`#category-${category.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+                    onClick={() => {
+                      handleCategorySelect(category);
+                      setIsMenuOpen(false);
+                    }}
                     className="block px-3 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
-                    onClick={() => setIsMenuOpen(false)}
                   >
                     {category}
-                  </a>
+                  </button>
                 ))}
               </div>
               

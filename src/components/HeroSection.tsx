@@ -59,13 +59,15 @@ const HeroSection = () => {
               Explore Tools
             </Button>
           </Link>
-          <Button
-            variant="outline"
-            size="lg"
-            className="border-muted-foreground/20 text-muted-foreground hover:bg-muted/50 px-8 py-4 text-lg rounded-xl transition-all duration-300"
-          >
-            Learn More
-          </Button>
+          <Link to="/about">
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-muted-foreground/20 text-muted-foreground hover:bg-muted/50 px-8 py-4 text-lg rounded-xl transition-all duration-300"
+            >
+              Learn More
+            </Button>
+          </Link>
         </div>
       </div>
 
