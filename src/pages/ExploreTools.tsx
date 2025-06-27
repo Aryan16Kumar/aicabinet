@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -5,9 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Toggle } from "@/components/ui/toggle";
 import { Card, CardContent } from "@/components/ui/card";
-import { LayoutGrid, LayoutList, Search } from "lucide-react";
+import { LayoutGrid, LayoutList, Search, ExternalLink } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useToolsByCategory } from "@/hooks/useTools";
 
 const categories = [
   "All Categories",
@@ -17,101 +20,15 @@ const categories = [
   "Marketing",
   "Education",
   "Productivity",
-  "Video & Audio"
-];
-
-const aiTools = [
-  {
-    id: 1,
-    name: "Midjourney",
-    category: "Design",
-    logo: "🎨",
-    description: "AI-powered image generation for creative professionals and artists"
-  },
-  {
-    id: 2,
-    name: "ChatGPT",
-    category: "Writing",
-    logo: "✍️",
-    description: "Advanced AI writing assistant for content creation and communication"
-  },
-  {
-    id: 3,
-    name: "GitHub Copilot",
-    category: "Development",
-    logo: "💻",
-    description: "AI pair programmer that helps you write better code faster"
-  },
-  {
-    id: 4,
-    name: "Jasper",
-    category: "Marketing",
-    logo: "📈",
-    description: "AI copywriting tool for marketing campaigns and content strategy"
-  },
-  {
-    id: 5,
-    name: "Teachable Machine",
-    category: "Education",
-    logo: "📚",
-    description: "Easy-to-use tool for training machine learning models"
-  },
-  {
-    id: 6,
-    name: "Notion AI",
-    category: "Productivity",
-    logo: "⚡",
-    description: "AI-powered workspace for notes, docs, and project management"
-  },
-  {
-    id: 7,
-    name: "RunwayML",
-    category: "Video & Audio",
-    logo: "🎬",
-    description: "AI video editing and generation platform for creators"
-  },
-  {
-    id: 8,
-    name: "Figma AI",
-    category: "Design",
-    logo: "🎨",
-    description: "AI-enhanced design tool for collaborative interface design"
-  },
-  {
-    id: 9,
-    name: "Grammarly",
-    category: "Writing",
-    logo: "✍️",
-    description: "AI writing assistant for grammar, spelling, and style improvements"
-  },
-  {
-    id: 10,
-    name: "Cursor",
-    category: "Development",
-    logo: "💻",
-    description: "AI-first code editor built for productivity and collaboration"
-  },
-  {
-    id: 11,
-    name: "Copy.ai",
-    category: "Marketing",
-    logo: "📈",
-    description: "AI-powered copywriting platform for marketing teams"
-  },
-  {
-    id: 12,
-    name: "Zapier",
-    category: "Productivity",
-    logo: "⚡",
-    description: "Automation platform connecting your favorite apps and services"
-  }
+  "Video & Audio",
+  "Data & Analytics"
 ];
 
 const ExploreTools = () => {
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [viewMode, setViewMode] = useState("grid"); // "grid" or "list"
+  const [viewMode, setViewMode] = useState("grid");
 
   // Handle URL parameter for category filtering
   useEffect(() => {
@@ -121,12 +38,27 @@ const ExploreTools = () => {
     }
   }, [searchParams]);
 
-  const filteredTools = aiTools.filter(tool => {
-    const matchesSearch = tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         tool.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "All Categories" || tool.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+  const { data: tools = [], isLoading, error } = useToolsByCategory(selectedCategory);
+
+  const filteredTools = tools.filter(tool => {
+    if (!tool.tool_name && !tool.description) return false;
+    
+    const matchesSearch = 
+      (tool.tool_name?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
+      (tool.description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
+    
+    return matchesSearch;
   });
+
+  const handleVisitWebsite = (url: string | null) => {
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  if (error) {
+    console.error('Error loading tools:', error);
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -199,65 +131,161 @@ const ExploreTools = () => {
           {/* Results Count */}
           <div className="mb-6">
             <p className="text-muted-foreground">
-              Showing {filteredTools.length} tool{filteredTools.length !== 1 ? 's' : ''}
-              {selectedCategory !== "All Categories" && ` in ${selectedCategory}`}
+              {isLoading ? (
+                "Loading tools..."
+              ) : (
+                <>
+                  Showing {filteredTools.length} tool{filteredTools.length !== 1 ? 's' : ''}
+                  {selectedCategory !== "All Categories" && ` in ${selectedCategory}`}
+                </>
+              )}
             </p>
           </div>
 
-          {/* Tools Grid/List */}
-          {viewMode === "grid" ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredTools.map((tool) => (
-                <Card
-                  key={tool.id}
-                  className="group cursor-pointer glass-effect hover:bg-muted/50 transition-all duration-300 transform hover:scale-105 hover:shadow-xl border-muted/20"
-                >
+          {/* Loading State */}
+          {isLoading && (
+            <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" : "space-y-3"}>
+              {Array.from({ length: 8 }).map((_, i) => (
+                <Card key={i} className="glass-effect border-muted/20">
                   <CardContent className="p-6">
-                    <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {tool.logo}
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors">
-                      {tool.name}
-                    </h3>
-                    <p className="text-muted-foreground text-sm mb-3 leading-relaxed">
-                      {tool.description}
-                    </p>
-                    <span className="text-xs text-blue-400 font-medium bg-blue-400/10 px-2 py-1 rounded">
-                      {tool.category}
-                    </span>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {filteredTools.map((tool) => (
-                <Card
-                  key={tool.id}
-                  className="group cursor-pointer glass-effect hover:bg-muted/50 transition-all duration-200 border-muted/20"
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-4">
-                      <div className="text-2xl group-hover:scale-110 transition-transform duration-300">
-                        {tool.logo}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold group-hover:text-blue-400 transition-colors">
-                          {tool.name}
-                        </h3>
-                      </div>
-                      <span className="text-xs text-blue-400 font-medium bg-blue-400/10 px-2 py-1 rounded">
-                        {tool.category}
-                      </span>
-                    </div>
+                    <Skeleton className="h-12 w-12 rounded mb-4" />
+                    <Skeleton className="h-6 w-3/4 mb-2" />
+                    <Skeleton className="h-4 w-full mb-3" />
+                    <Skeleton className="h-6 w-20" />
                   </CardContent>
                 </Card>
               ))}
             </div>
           )}
 
+          {/* Error State */}
+          {error && (
+            <div className="text-center py-12">
+              <div className="text-4xl mb-4">⚠️</div>
+              <h3 className="text-xl font-semibold mb-2">Error loading tools</h3>
+              <p className="text-muted-foreground">
+                Please try again later or refresh the page
+              </p>
+            </div>
+          )}
+
+          {/* Tools Grid/List */}
+          {!isLoading && !error && (
+            <>
+              {viewMode === "grid" ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {filteredTools.map((tool) => (
+                    <Card
+                      key={tool.id}
+                      className="group cursor-pointer glass-effect hover:bg-muted/50 transition-all duration-300 transform hover:scale-105 hover:shadow-xl border-muted/20"
+                    >
+                      <CardContent className="p-6">
+                        <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
+                          {tool.logo_url ? (
+                            <img 
+                              src={tool.logo_url} 
+                              alt={tool.tool_name || 'Tool logo'} 
+                              className="w-12 h-12 object-contain rounded"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iOCIgZmlsbD0iIzMzMzMzMyIvPgo8dGV4dCB4PSIyNCIgeT0iMjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIiBmb250LXNpemU9IjEyIj7wn5SCPC90ZXh0Pgo8L3N2Zz4K';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-12 h-12 bg-muted rounded flex items-center justify-center text-2xl">
+                              🔧
+                            </div>
+                          )}
+                        </div>
+                        <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors">
+                          {tool.tool_name || 'Unnamed Tool'}
+                        </h3>
+                        <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-3">
+                          {tool.description || 'No description available'}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          {tool.category && (
+                            <span className="text-xs text-blue-400 font-medium bg-blue-400/10 px-2 py-1 rounded">
+                              {tool.category}
+                            </span>
+                          )}
+                          {tool.tool_url && (
+                            <Button
+                              size="sm"
+                              onClick={() => handleVisitWebsite(tool.tool_url)}
+                              className="ml-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg transition-all duration-300"
+                            >
+                              <ExternalLink className="h-3 w-3 mr-1" />
+                              Visit
+                            </Button>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {filteredTools.map((tool) => (
+                    <Card
+                      key={tool.id}
+                      className="group cursor-pointer glass-effect hover:bg-muted/50 transition-all duration-200 border-muted/20"
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-center gap-4">
+                          <div className="group-hover:scale-110 transition-transform duration-300">
+                            {tool.logo_url ? (
+                              <img 
+                                src={tool.logo_url} 
+                                alt={tool.tool_name || 'Tool logo'} 
+                                className="w-10 h-10 object-contain rounded"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iNiIgZmlsbD0iIzMzMzMzMyIvPgo8dGV4dCB4PSIyMCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIiBmb250LXNpemU9IjEwIj7wn5SCPC90ZXh0Pgo8L3N2Zz4K';
+                                }}
+                              />
+                            ) : (
+                              <div className="w-10 h-10 bg-muted rounded flex items-center justify-center text-xl">
+                                🔧
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-lg font-semibold group-hover:text-blue-400 transition-colors">
+                              {tool.tool_name || 'Unnamed Tool'}
+                            </h3>
+                            <p className="text-muted-foreground text-sm line-clamp-1">
+                              {tool.description || 'No description available'}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            {tool.category && (
+                              <span className="text-xs text-blue-400 font-medium bg-blue-400/10 px-2 py-1 rounded">
+                                {tool.category}
+                              </span>
+                            )}
+                            {tool.tool_url && (
+                              <Button
+                                size="sm"
+                                onClick={() => handleVisitWebsite(tool.tool_url)}
+                                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg transition-all duration-300"
+                              >
+                                <ExternalLink className="h-3 w-3 mr-1" />
+                                Visit
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+
           {/* No Results */}
-          {filteredTools.length === 0 && (
+          {!isLoading && !error && filteredTools.length === 0 && (
             <div className="text-center py-12">
               <div className="text-4xl mb-4">🔍</div>
               <h3 className="text-xl font-semibold mb-2">No tools found</h3>
