@@ -21,52 +21,98 @@ const Privacy = () => {
                 Policy
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground">
-              Your privacy is important to us
+            <p className="text-lg text-muted-foreground">
+              Effective Date: June 28, 2025
             </p>
           </div>
 
           <div className="prose prose-lg max-w-none text-muted-foreground space-y-8">
-            <section>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Information We Collect</h2>
-              <p className="text-lg leading-relaxed">
-                We collect information you provide directly to us, such as when you create an account, submit tool information, or contact us for support. This may include your name, email address, and any other information you choose to provide.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">How We Use Your Information</h2>
-              <p className="text-lg leading-relaxed">
-                We use the information we collect to provide, maintain, and improve our services, process transactions, send you technical notices and support messages, and communicate with you about products, services, and promotional offers.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Information Sharing</h2>
-              <p className="text-lg leading-relaxed">
-                We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy. We may share your information with trusted service providers who assist us in operating our website and conducting our business.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Data Security</h2>
-              <p className="text-lg leading-relaxed">
-                We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet is 100% secure.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Contact Us</h2>
-              <p className="text-lg leading-relaxed">
-                If you have any questions about this Privacy Policy, please contact us through our website or email us directly. We're committed to addressing your concerns and protecting your privacy.
-              </p>
-            </section>
-          </div>
-
-          <div className="mt-16 text-center">
-            <p className="text-sm text-muted-foreground">
-              Last updated: December 2024
+            <p className="text-lg leading-relaxed">
+              At AiCabinet, accessible from [your domain], we are committed to protecting your privacy and ensuring a secure experience while browsing and using our platform.
             </p>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">1. Information We Collect</h2>
+              <p className="text-lg leading-relaxed mb-4">
+                We do not collect any personal information from visitors browsing tools on our site.
+              </p>
+              <p className="text-lg leading-relaxed mb-4">
+                However, if you choose to submit a tool suggestion via our form, we may collect:
+              </p>
+              <ul className="list-disc pl-6 space-y-2 text-lg">
+                <li>Your name (if entered)</li>
+                <li>Your email address (for follow-up)</li>
+                <li>Tool details (name, URL, description)</li>
+              </ul>
+              <p className="text-lg leading-relaxed mt-4">
+                This information is used solely for internal review and tool evaluation purposes.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">2. How We Use Your Information</h2>
+              <p className="text-lg leading-relaxed mb-4">We use submitted data to:</p>
+              <ul className="list-disc pl-6 space-y-2 text-lg">
+                <li>Review and approve AI tools for listing</li>
+                <li>Contact you (if necessary) for more information about a submission</li>
+              </ul>
+              <p className="text-lg leading-relaxed mt-4">
+                We do not sell, rent, or share your personal data with third parties.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">3. Cookies</h2>
+              <p className="text-lg leading-relaxed mb-4">
+                AiCabinet may use basic cookies or analytics tools (like Google Analytics) to improve performance and user experience. These do not identify individuals.
+              </p>
+              <p className="text-lg leading-relaxed">
+                You can disable cookies in your browser settings if you prefer.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">4. Third-Party Links</h2>
+              <p className="text-lg leading-relaxed">
+                Our site links to external AI tools and services. Once you leave AiCabinet and visit third-party websites, their own privacy policies apply.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">5. Data Security</h2>
+              <p className="text-lg leading-relaxed">
+                All data is securely stored using encrypted databases through Supabase. Only authorized team members can access submitted data.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">6. Your Rights</h2>
+              <p className="text-lg leading-relaxed mb-4">You may request:</p>
+              <ul className="list-disc pl-6 space-y-2 text-lg">
+                <li>To view any personal data we hold about you</li>
+                <li>To delete your submitted information</li>
+              </ul>
+              <p className="text-lg leading-relaxed mt-4">
+                To make such a request, contact us at [your support email].
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">7. Policy Updates</h2>
+              <p className="text-lg leading-relaxed">
+                We may update this policy occasionally. Updates will be posted on this page with the new effective date.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">8. Contact Us</h2>
+              <p className="text-lg leading-relaxed">
+                For any privacy concerns or questions, please reach out to:
+              </p>
+              <p className="text-lg leading-relaxed mt-2">
+                📧 [your support email]
+              </p>
+            </section>
           </div>
         </div>
         <Footer />
