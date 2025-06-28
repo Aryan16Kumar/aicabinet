@@ -28,7 +28,7 @@ const Privacy = () => {
 
           <div className="prose prose-lg max-w-none text-muted-foreground space-y-8">
             <p className="text-lg leading-relaxed">
-              At AiCabinet, accessible from [your domain], we are committed to protecting your privacy and ensuring a secure experience while browsing and using our platform.
+              At AiCabinet, we are committed to protecting your privacy and ensuring a secure experience while browsing and using our platform.
             </p>
 
             <section>
