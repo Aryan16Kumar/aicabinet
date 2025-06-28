@@ -17,8 +17,7 @@ const Navbar = () => {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Tools", href: "/explore-tools" },
-    { name: "About", href: "/about" },
-    { name: "Contact", href: "#contact" }
+    { name: "About", href: "/about" }
   ];
 
   const categories = [
@@ -61,23 +60,13 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              item.name === "Home" || item.name === "Tools" || item.name === "About" ? (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-                >
-                  {item.name}
-                </Link>
-              ) : (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-                >
-                  {item.name}
-                </a>
-              )
+              <Link
+                key={item.name}
+                to={item.href}
+                className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+              >
+                {item.name}
+              </Link>
             ))}
             
             {/* Categories Dropdown */}
@@ -135,25 +124,14 @@ const Navbar = () => {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 border-t border-border">
               {navItems.map((item) => (
-                item.name === "Home" || item.name === "Tools" || item.name === "About" ? (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className="block px-3 py-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
-                ) : (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="block px-3 py-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.name}
-                  </a>
-                )
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="block px-3 py-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
               ))}
               
               {/* Categories in Mobile Menu */}

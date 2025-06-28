@@ -1,6 +1,5 @@
 
 import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
@@ -58,23 +57,6 @@ const Footer = () => {
               Your organized space for discovering, comparing, and accessing the best AI tools. 
               Curated for professionals across all industries.
             </p>
-            <div className="flex gap-4 mt-6">
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-muted/30 hover:bg-muted/50 rounded-lg"
-              >
-                <Github className="w-4 h-4 mr-2" />
-                GitHub
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-muted/30 hover:bg-muted/50 rounded-lg"
-              >
-                Twitter
-              </Button>
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -96,11 +78,6 @@ const Footer = () => {
                   Featured
                 </button>
               </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
-                  New Releases
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -114,19 +91,14 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a href="#contact" className="text-muted-foreground hover:text-blue-400 transition-colors">
-                  Contact
-                </a>
-              </li>
-              <li>
                 <Link to="/submit-tool" className="text-muted-foreground hover:text-blue-400 transition-colors">
                   Submit Tool
                 </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-blue-400 transition-colors">
+                <Link to="/privacy" className="text-muted-foreground hover:text-blue-400 transition-colors">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
