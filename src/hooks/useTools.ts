@@ -71,9 +71,21 @@ export const useToolsWithSearch = (category: string, searchTerm: string = "") =>
         query = query.eq('category', category);
       }
       
-      // Apply search filter
+      // Apply search filter with multiple keyword support
       if (searchTerm.trim()) {
-        query = query.or(`tool_name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,category.ilike.%${searchTerm}%`);
+        // Split search term into individual keywords
+        const keywords = searchTerm.trim().split(/\s+/);
+        console.log('Search keywords:', keywords);
+        
+        // Create OR conditions for each keyword across all searchable fields
+        const searchConditions = keywords.map(keyword => {
+          const escapedKeyword = keyword.replace(/[%_]/g, '\\$&'); // Escape special characters
+          return `tool_name.ilike.%${escapedKeyword}%,description.ilike.%${escapedKeyword}%,category.ilike.%${escapedKeyword}%`;
+        });
+        
+        // Join all conditions with OR logic
+        const combinedCondition = searchConditions.join(',');
+        query = query.or(combinedCondition);
       }
       
       query = query.order('tool_name');
