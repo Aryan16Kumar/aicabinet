@@ -64,41 +64,46 @@ export const useToolsWithSearch = (category: string, searchTerm: string = "") =>
     queryFn: async (): Promise<Tool[]> => {
       console.log('Fetching tools with search:', { category, searchTerm });
       
-      let query = supabase.from('Database').select('*');
-      
-      // Apply category filter
-      if (category !== "All Categories") {
-        query = query.eq('category', category);
-      }
-      
-      // Apply search filter with multiple keyword support
-      if (searchTerm.trim()) {
-        // Split search term into individual keywords
-        const keywords = searchTerm.trim().split(/\s+/);
-        console.log('Search keywords:', keywords);
-        
-        // Create OR conditions for each keyword across all searchable fields
-        const searchConditions = keywords.map(keyword => {
-          const escapedKeyword = keyword.replace(/[%_]/g, '\\$&'); // Escape special characters
-          return `tool_name.ilike.%${escapedKeyword}%,description.ilike.%${escapedKeyword}%,category.ilike.%${escapedKeyword}%`;
-        });
-        
-        // Join all conditions with OR logic
-        const combinedCondition = searchConditions.join(',');
-        query = query.or(combinedCondition);
-      }
-      
-      query = query.order('tool_name');
-
-      const { data, error } = await query;
+      const { data, error } = await supabase
+        .from('Database')
+        .select('*')
+        .order('tool_name');
 
       if (error) {
         console.error('Error fetching tools with search:', error);
         throw error;
       }
 
-      console.log('Fetched tools with search:', { category, searchTerm, results: data });
-      return data || [];
+      let filteredData = data || [];
+
+      // Apply category filter with flexible matching
+      if (category !== "All Categories") {
+        filteredData = filteredData.filter(tool => {
+          if (!tool.category) return false;
+          // Clean and normalize category names for comparison
+          const cleanToolCategory = tool.category.trim();
+          return cleanToolCategory === category;
+        });
+      }
+      
+      // Apply search filter
+      if (searchTerm.trim()) {
+        const keywords = searchTerm.trim().toLowerCase().split(/\s+/);
+        console.log('Search keywords:', keywords);
+        
+        filteredData = filteredData.filter(tool => {
+          const searchableText = [
+            tool.tool_name,
+            tool.description,
+            tool.category
+          ].filter(Boolean).join(' ').toLowerCase();
+          
+          return keywords.some(keyword => searchableText.includes(keyword));
+        });
+      }
+
+      console.log('Filtered tools with search:', { category, searchTerm, results: filteredData });
+      return filteredData;
     },
   });
 };

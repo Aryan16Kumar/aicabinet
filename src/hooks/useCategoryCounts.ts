@@ -23,12 +23,16 @@ export const useCategoryCounts = () => {
         throw error;
       }
 
-      // Count tools per category
+      // Count tools per category, cleaning up category names
       const categoryCounts: { [key: string]: number } = {};
       
       data.forEach((tool) => {
         if (tool.category) {
-          categoryCounts[tool.category] = (categoryCounts[tool.category] || 0) + 1;
+          // Clean up category name by trimming whitespace and newlines
+          const cleanCategory = tool.category.trim();
+          if (cleanCategory) {
+            categoryCounts[cleanCategory] = (categoryCounts[cleanCategory] || 0) + 1;
+          }
         }
       });
 
