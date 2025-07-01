@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -88,6 +89,12 @@ const ExploreTools = () => {
   };
 
   const handleVisitWebsite = (url: string | null) => {
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleToolNameClick = (url: string | null) => {
     if (url) {
       window.open(url, '_blank', 'noopener,noreferrer');
     }
@@ -245,9 +252,18 @@ const ExploreTools = () => {
                             </div>
                           )}
                         </div>
-                        <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors">
-                          {tool.tool_name || 'Unnamed Tool'}
-                        </h3>
+                        {tool.tool_url ? (
+                          <h3 
+                            onClick={() => handleToolNameClick(tool.tool_url)}
+                            className="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors cursor-pointer hover:underline"
+                          >
+                            {tool.tool_name || 'Unnamed Tool'}
+                          </h3>
+                        ) : (
+                          <h3 className="text-lg font-semibold mb-2 text-muted-foreground">
+                            {tool.tool_name || 'Unnamed Tool'}
+                          </h3>
+                        )}
                         <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-3">
                           {tool.description || 'No description available'}
                         </p>
@@ -299,9 +315,18 @@ const ExploreTools = () => {
                             )}
                           </div>
                           <div className="flex-1">
-                            <h3 className="text-lg font-semibold group-hover:text-blue-400 transition-colors">
-                              {tool.tool_name || 'Unnamed Tool'}
-                            </h3>
+                            {tool.tool_url ? (
+                              <h3 
+                                onClick={() => handleToolNameClick(tool.tool_url)}
+                                className="text-lg font-semibold group-hover:text-blue-400 transition-colors cursor-pointer hover:underline"
+                              >
+                                {tool.tool_name || 'Unnamed Tool'}
+                              </h3>
+                            ) : (
+                              <h3 className="text-lg font-semibold text-muted-foreground">
+                                {tool.tool_name || 'Unnamed Tool'}
+                              </h3>
+                            )}
                             <p className="text-muted-foreground text-sm line-clamp-1">
                               {tool.description || 'No description available'}
                             </p>
