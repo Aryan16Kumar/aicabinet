@@ -21,7 +21,7 @@ const categories = [
   "Education",
   "Productivity",
   "Video & Audio",
-  "Data & Analytics"
+  "Data Analytics"
 ];
 
 const ExploreTools = () => {

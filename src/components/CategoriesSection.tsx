@@ -40,7 +40,7 @@ const categories = [
     icon: "🎬"
   },
   {
-    name: "Data & Analytics",
+    name: "Data Analytics",
     description: "Data processing, visualization, and insights",
     icon: "📊"
   }
