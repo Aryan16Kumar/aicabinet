@@ -104,12 +104,9 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-muted/20 flex flex-col md:flex-row justify-between items-center">
+        {/* Bottom Bar - Simplified without copyright */}
+        <div className="pt-8 border-t border-muted/20 flex justify-center items-center">
           <p className="text-muted-foreground text-sm">
-            © 2024 AiCabinet. All rights reserved.
-          </p>
-          <p className="text-muted-foreground text-sm mt-4 md:mt-0">
             Made with ❤️ for the AI community
           </p>
         </div>
