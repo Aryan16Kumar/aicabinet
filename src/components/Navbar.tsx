@@ -27,7 +27,8 @@ const Navbar = () => {
     "Marketing",
     "Education",
     "Productivity",
-    "Video & Audio"
+    "Video & Audio",
+    "Data Analytics"
   ];
 
   const handleCategoriesClick = () => {

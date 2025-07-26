@@ -5,18 +5,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search } from "lucide-react";
+import { useTrackSearch } from "@/hooks/useAnalytics";
 
 const SearchSection = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedPricing, setSelectedPricing] = useState("");
   const navigate = useNavigate();
+  const trackSearch = useTrackSearch();
 
   const handleSearch = () => {
     const params = new URLSearchParams();
     
     if (searchTerm.trim()) {
       params.set('search', searchTerm.trim());
+      // Track the search
+      trackSearch.mutate({ searchTerm: searchTerm.trim() });
     }
     
     if (selectedCategory && selectedCategory !== "all") {
@@ -82,10 +86,12 @@ const SearchSection = () => {
                   <SelectItem value="Design">Design</SelectItem>
                   <SelectItem value="Development">Development</SelectItem>
                   <SelectItem value="Writing">Writing</SelectItem>
+                  <SelectItem value="Writing & Copy">Writing & Copy</SelectItem>
                   <SelectItem value="Marketing">Marketing</SelectItem>
                   <SelectItem value="Education">Education</SelectItem>
                   <SelectItem value="Productivity">Productivity</SelectItem>
                   <SelectItem value="Video & Audio">Video & Audio</SelectItem>
+                  <SelectItem value="Data Analytics">Data Analytics</SelectItem>
                 </SelectContent>
               </Select>
             </div>

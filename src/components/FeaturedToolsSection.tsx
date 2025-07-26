@@ -1,32 +1,44 @@
-import { useTools } from "@/hooks/useTools";
+import { useFeaturedTools, useTrackInteraction } from "@/hooks/useAnalytics";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, TrendingUp } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const FeaturedToolsSection = () => {
-  const { data: tools = [], isLoading } = useTools();
+  const { data: featuredTools = [], isLoading } = useFeaturedTools();
+  const trackInteraction = useTrackInteraction();
 
-  // Take first 6 tools as featured for now
-  const featuredTools = tools.slice(0, 6);
-
-  const handleVisitWebsite = (url: string | null) => {
+  const handleVisitWebsite = (url: string | null, toolId: number) => {
     if (url) {
+      // Track the visit interaction
+      trackInteraction.mutate({ 
+        toolId, 
+        actionType: 'visit' 
+      });
       window.open(url, '_blank', 'noopener,noreferrer');
     }
+  };
+
+  const handleToolClick = (toolId: number) => {
+    // Track the click interaction
+    trackInteraction.mutate({ 
+      toolId, 
+      actionType: 'click' 
+    });
   };
 
   return (
     <section id="featured" className="py-24 px-6 bg-muted/20">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-6">
-            Featured 
+          <h2 className="text-4xl font-bold mb-6 flex items-center justify-center gap-3">
+            <TrendingUp className="h-8 w-8 text-blue-400" />
+            Most Popular
             <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent ml-3">
               AI Tools
             </span>
           </h2>
           <p className="text-lg text-muted-foreground">
-            Explore some of the best AI tools our community loves
+            Discover the most searched and visited AI tools by our community in the last 30 days
           </p>
         </div>
 
@@ -67,7 +79,10 @@ const FeaturedToolsSection = () => {
                       </div>
                     )}
                   </div>
-                  <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors">
+                  <h3 
+                    className="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors cursor-pointer"
+                    onClick={() => handleToolClick(tool.id)}
+                  >
                     {tool.tool_name || 'Unnamed Tool'}
                   </h3>
                   <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-3">
@@ -82,7 +97,7 @@ const FeaturedToolsSection = () => {
                     {tool.tool_url && (
                       <Button
                         size="sm"
-                        onClick={() => handleVisitWebsite(tool.tool_url)}
+                        onClick={() => handleVisitWebsite(tool.tool_url, tool.id)}
                         className="ml-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg transition-all duration-300"
                       >
                         <ExternalLink className="h-3 w-3 mr-1" />

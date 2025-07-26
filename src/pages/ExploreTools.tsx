@@ -11,11 +11,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useToolsWithSearch } from "@/hooks/useTools";
+import { useTrackInteraction, useTrackSearch } from "@/hooks/useAnalytics";
 
 const categories = [
   "All Categories",
   "Design",
   "Writing",
+  "Writing & Copy",
   "Development", 
   "Marketing",
   "Education",
@@ -50,6 +52,8 @@ const ExploreTools = () => {
   }, [searchParams]);
 
   const { data: tools = [], isLoading, error } = useToolsWithSearch(selectedCategory, searchTerm);
+  const trackInteraction = useTrackInteraction();
+  const trackSearch = useTrackSearch();
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -73,6 +77,8 @@ const ExploreTools = () => {
     
     if (searchTerm.trim()) {
       newParams.set('search', searchTerm.trim());
+      // Track the search
+      trackSearch.mutate({ searchTerm: searchTerm.trim() });
     }
     
     if (selectedCategory !== "All Categories") {
@@ -88,14 +94,24 @@ const ExploreTools = () => {
     }
   };
 
-  const handleVisitWebsite = (url: string | null) => {
+  const handleVisitWebsite = (url: string | null, toolId: number) => {
     if (url) {
+      // Track the visit interaction
+      trackInteraction.mutate({ 
+        toolId, 
+        actionType: 'visit' 
+      });
       window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
 
-  const handleToolNameClick = (url: string | null) => {
+  const handleToolNameClick = (url: string | null, toolId: number) => {
     if (url) {
+      // Track the click interaction
+      trackInteraction.mutate({ 
+        toolId, 
+        actionType: 'click' 
+      });
       window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
@@ -254,7 +270,7 @@ const ExploreTools = () => {
                         </div>
                         {tool.tool_url ? (
                           <h3 
-                            onClick={() => handleToolNameClick(tool.tool_url)}
+                            onClick={() => handleToolNameClick(tool.tool_url, tool.id)}
                             className="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors cursor-pointer hover:underline"
                           >
                             {tool.tool_name || 'Unnamed Tool'}
@@ -276,7 +292,7 @@ const ExploreTools = () => {
                           {tool.tool_url && (
                             <Button
                               size="sm"
-                              onClick={() => handleVisitWebsite(tool.tool_url)}
+                              onClick={() => handleVisitWebsite(tool.tool_url, tool.id)}
                               className="ml-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg transition-all duration-300"
                             >
                               <ExternalLink className="h-3 w-3 mr-1" />
@@ -317,7 +333,7 @@ const ExploreTools = () => {
                           <div className="flex-1">
                             {tool.tool_url ? (
                               <h3 
-                                onClick={() => handleToolNameClick(tool.tool_url)}
+                                onClick={() => handleToolNameClick(tool.tool_url, tool.id)}
                                 className="text-lg font-semibold group-hover:text-blue-400 transition-colors cursor-pointer hover:underline"
                               >
                                 {tool.tool_name || 'Unnamed Tool'}
@@ -340,7 +356,7 @@ const ExploreTools = () => {
                             {tool.tool_url && (
                               <Button
                                 size="sm"
-                                onClick={() => handleVisitWebsite(tool.tool_url)}
+                                onClick={() => handleVisitWebsite(tool.tool_url, tool.id)}
                                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg transition-all duration-300"
                               >
                                 <ExternalLink className="h-3 w-3 mr-1" />
