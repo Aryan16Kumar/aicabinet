@@ -22,7 +22,6 @@ const Navbar = () => {
 
   const categories = [
     "Design",
-    "Writing & Copy",
     "Development",
     "Marketing",
     "Education",

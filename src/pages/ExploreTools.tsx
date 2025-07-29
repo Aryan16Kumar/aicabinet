@@ -17,7 +17,6 @@ const categories = [
   "All Categories",
   "Design",
   "Writing",
-  "Writing & Copy",
   "Development", 
   "Marketing",
   "Education",

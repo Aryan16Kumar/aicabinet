@@ -86,7 +86,6 @@ const SearchSection = () => {
                   <SelectItem value="Design">Design</SelectItem>
                   <SelectItem value="Development">Development</SelectItem>
                   <SelectItem value="Writing">Writing</SelectItem>
-                  <SelectItem value="Writing & Copy">Writing & Copy</SelectItem>
                   <SelectItem value="Marketing">Marketing</SelectItem>
                   <SelectItem value="Education">Education</SelectItem>
                   <SelectItem value="Productivity">Productivity</SelectItem>
