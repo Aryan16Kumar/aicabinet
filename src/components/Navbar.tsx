@@ -32,13 +32,6 @@ const Navbar = () => {
 
   const handleCategoriesClick = () => {
     navigate('/explore-tools');
-    // Small delay to ensure page loads before trying to trigger category filter
-    setTimeout(() => {
-      const categorySelect = document.querySelector('[data-category-select]');
-      if (categorySelect) {
-        (categorySelect as HTMLElement).click();
-      }
-    }, 100);
   };
 
   const handleCategorySelect = (category: string) => {
