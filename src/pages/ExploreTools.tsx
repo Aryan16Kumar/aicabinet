@@ -43,10 +43,14 @@ const ExploreTools = () => {
     
     if (categoryParam && categories.includes(categoryParam)) {
       setSelectedCategory(categoryParam);
+    } else {
+      setSelectedCategory("All Categories");
     }
     
     if (searchParam) {
       setSearchTerm(searchParam);
+    } else {
+      setSearchTerm("");
     }
   }, [searchParams]);
 
